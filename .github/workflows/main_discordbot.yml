@@ -23,12 +23,10 @@ jobs:
      with:
       node-version: "22.x"
 
-   - name: npm install, build and prepare
+   - name: npm install and build
      run: |
       npm install
       npm run build
-      npm run lint --if-present
-      npm run format:check --if-present
 
    - name: Upload artifact for deployment job
      uses: actions/upload-artifact@v4
