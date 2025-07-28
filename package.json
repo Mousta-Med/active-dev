@@ -43,6 +43,7 @@
     "@types/node": "24.1.0",
     "@types/prompts": "2.4.9",
     "eslint": "9.31.0",
+    "jiti": "^2.5.1",
     "prettier": "3.6.2",
     "tsx": "4.20.3",
     "typescript": "^5.0.0"
