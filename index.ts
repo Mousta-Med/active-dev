@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import { Client, EmbedBuilder, IntentsBitField, MessageFlags, Events } from "discord.js";
+import express from "express";
 import fetch from "node-fetch";
 import ora from "ora";
 import prompts from "prompts";
@@ -58,8 +59,10 @@ const valid = await checkToken(botToken);
 
 if (!valid) {
  console.log(chalk.bold.red("✖ Invalid Discord Bot token!"));
- /* eslint-disable-next-line node/no-process-exit */
- process.exit(0);
+ if (!process.env.DISCORD_BOT_TOKEN) {
+  /* eslint-disable-next-line node/no-process-exit */
+  process.exit(0);
+ }
 }
 
 console.log();
@@ -69,12 +72,18 @@ const client = new Client({
  intents: [IntentsBitField.Flags.Guilds],
 });
 
-try {
- client.login(botToken);
-} catch (_e) {
- spinner.fail(chalk.bold("Error while logging in to Discord! GG, You broke Discord!"));
- /* eslint-disable-next-line node/no-process-exit */
- process.exit(0);
+if (valid) {
+ try {
+  client.login(botToken);
+ } catch (_e) {
+  spinner.fail(chalk.bold("Error while logging in to Discord! GG, You broke Discord!"));
+  if (!process.env.DISCORD_BOT_TOKEN) {
+   /* eslint-disable-next-line node/no-process-exit */
+   process.exit(0);
+  }
+ }
+} else {
+ spinner.fail(chalk.bold("Skipping Discord login due to invalid token - HTTP server will still run"));
 }
 
 const slashSpinner = ora(chalk.bold("Creating slash command interaction..."));
@@ -134,4 +143,25 @@ client.on(Events.InteractionCreate, async (interaction) => {
   /* eslint-disable-next-line node/no-process-exit */
   process.exit(0);
  }
+});
+
+// Create Express server for Azure App Service compatibility
+const app = express();
+const port = process.env.PORT || 8080;
+
+app.get('/', (req, res) => {
+ res.json({
+  status: 'Discord Bot is running!',
+  bot: client.user?.tag || 'Not logged in',
+  uptime: process.uptime(),
+  timestamp: new Date().toISOString()
+ });
+});
+
+app.get('/health', (req, res) => {
+ res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+app.listen(port, () => {
+ console.log(chalk.bold.green(`🌐 HTTP server listening on port ${port}`));
 });
