@@ -5,7 +5,9 @@
   "exports": null,
   "type": "module",
   "scripts": {
-    "start": "tsx index.ts",
+    "start": "node dist/index.js",
+    "dev": "tsx index.ts",
+    "build": "tsc",
     "format": "prettier . --write --cache --ignore-unknown",
     "format:check": "prettier . --check --cache --ignore-unknown",
     "lint": "eslint .",
@@ -42,7 +44,8 @@
     "@types/prompts": "2.4.9",
     "eslint": "9.31.0",
     "prettier": "3.6.2",
-    "tsx": "4.20.3"
+    "tsx": "4.20.3",
+    "typescript": "^5.0.0"
   },
   "packageManager": "pnpm@10.13.1",
   "pnpm": {

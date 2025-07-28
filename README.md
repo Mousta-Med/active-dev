@@ -27,6 +27,21 @@
 - In Replit click `Run` button and wait for the app to start
 - Follow the instructions in the CLI and you're done!
 
+## 🔩 Installation (Azure Cloud Hosting)
+
+**For continuous 24/7 hosting on Microsoft Azure:**
+
+- Fork this repository to your GitHub account
+- Create an Azure App Service (Node.js runtime)
+- In Azure Portal, go to your App Service → Deployment Center
+- Connect your GitHub repository and select the `main` branch
+- Azure will automatically deploy using the GitHub Actions workflow
+- In App Service → Configuration → Application Settings, add:
+  - `DISCORD_BOT_TOKEN`: Your Discord bot token
+  - `NODE_ENV`: `production`
+- The bot will run continuously and restart automatically if it crashes
+- Monitor logs in Azure Portal → App Service → Log stream
+
 ## 🔩 Installation (Windows)
 
 - Download the latest version of Node.js from [here](https://nodejs.org/en/download/) and install it
